@@ -17,50 +17,36 @@ window.findNRooksSolution = function(n) {
   var board = new Board({n:n});
   var solution = board.rows();
   var rookCount = n;
-  var colIndex = 0;
+  var initColIndex = 0;
 
   console.log("board: ", board);
   console.log("solution: " + solution);
 
 
   var recurse = function(colIndex){
-      if (rookCount === 0){
-        return;
-      }
-      debugger;
+    if (rookCount === 0){
+      return board.rows();
+    }
     // iterate through column
     for (var row = 0 ; row < n ; row++){
       var boardRow = board.get(row);
       // place rook in cell
-      boardRow[colIndex] = 1;
-      console.log("boardRow[colIndex]: " + boardRow[colIndex]);
+      board.togglePiece(row, colIndex);
       // check for conflicts
-      // if( board.hasRowConflictAt(boardRow) )
-      if( board.hasRowConflictAt(row) ){
-        console.log( board.hasRowConflictAt(row) );
-        console.log('conflict');
+      if( board.hasAnyRooksConflicts() ){
         // if conflicts, erase rook
-        boardRow[colIndex] = 0;
+        board.togglePiece(row, colIndex);
       } else {
-        console.log("rookCount: " + rookCount);
         rookCount--;
       }
-      colIndex++;
-      recurse(colIndex);
     }
+    if (colIndex < n){
+      colIndex++;
+    }
+    recurse(colIndex);
   };
 
-  recurse(colIndex);
-
-  // create conflict count
-  // insert rook at 0,0
-  // decrement rook count
-  // recurse into second column
-    // if conflict
-      //increment conflict count
-      //move down one row
-    // if no conflict, insert rook
-
+  recurse(initColIndex);
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
