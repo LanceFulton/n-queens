@@ -84,7 +84,6 @@
       for ( var i = 0; i < row.length; i++ ) {
         count += row[i];
       }
-      console.log(count>1);
       return count > 1;
     },
 
