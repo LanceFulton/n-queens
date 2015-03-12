@@ -19,10 +19,6 @@ window.findNRooksSolution = function(n) {
   var rookCount = n;
   var initColIndex = 0;
 
-  console.log("board: ", board);
-  console.log("solution: " + solution);
-
-
   var recurse = function(colIndex){
     if (rookCount === 0){
       return board.rows();
@@ -56,7 +52,24 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  // var n = this.get('n');
+  var solutionCount = factorial(n);
+
+  function factorial(num){
+    // If the number is less than 0, reject it.
+    if (num < 0) {
+        return -1;
+    }
+    // If the number is 0, its factorial is 1.
+    else if (num == 0) {
+        return 1;
+    }
+    var tmp = num;
+    while (num-- > 2) {
+        tmp *= num;
+    }
+    return tmp;
+  }
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
