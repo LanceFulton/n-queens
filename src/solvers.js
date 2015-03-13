@@ -72,36 +72,34 @@ window.countNRooksSolutions = function(n) {
 window.findNQueensSolution = function(n) {
   var board = new Board({n:n});
   var solution = board.rows();
-  var queenCount = n;
   var initColIndex = 0;
+  var copy;
+
+  if (n === 0 || n === 2 || n === 3) {
+    return solution;
+  }
 
   var recurse = function(colIndex){
-    if (queenCount === 0){
-      return board.rows();
+    if (colIndex === n && copy === undefined){
+      copy = board.rows();
+      console.log("Our Solution: ", JSON.stringify(copy));
+      return;
     }
-    // iterate through column
     for (var row = 0 ; row < n ; row++){
-      var boardRow = board.get(row);
-      // place queen in cell
       board.togglePiece(row, colIndex);
-      // check for conflicts
-      if( board.hasAnyQueensConflicts() ){
-        // if conflicts, erase rook
-        board.togglePiece(row, colIndex);
-      } else {
-        queenCount--;
+      if( !board.hasAnyQueensConflicts() ) {
+        recurse(colIndex+1);
+        if (copy !== undefined) {
+          return;
+        }
       }
+      board.togglePiece(row, colIndex); 
     }
-    if (colIndex < n){
-      colIndex++;
-    }
-    recurse(colIndex);
   };
-
   recurse(initColIndex);
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(copy));
+  return copy;
 };
 
 
